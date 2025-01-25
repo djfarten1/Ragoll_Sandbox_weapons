@@ -1,0 +1,6 @@
+"AddonInfo"
+{
+	"name" "Ragdoll Sandbox More Weapons"
+	"author_name" "Author Name"
+	"info" "{"title":"Ragdoll Sandbox More Weapons","type":"weapon","tags":["fun","realism","cartoon"],"ignore":[]}"
+}
