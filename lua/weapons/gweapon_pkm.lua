@@ -1,7 +1,8 @@
 AddCSLuaFile()
 SWEP.Base = "rs_weapon_base"
-SWEP.PrintName = "Galil"
-SWEP.Instructions = "galil"
+SWEP.PrintName = "Pkm"
+SWEP.Author = "DJFARTEN"
+SWEP.Instructions = "SPRAY THAT BITCH!"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 2
@@ -10,7 +11,7 @@ SWEP.Initialize = function(self)
 	self:AutoHooksCreate()
 end
 
-SWEP.WeaponModel = "models/weapons/w_rif_galil.mdl"
+SWEP.WeaponModel = "models/pwb2/weapons/w_pkm.mdl"
 
 SWEP.Category = "Guns"
 
@@ -23,12 +24,12 @@ SWEP.TerminalSpeed = 110
 SWEP.AttackCD = 0.3
 SWEP.AttackCDStab = 0.4
 
-SWEP.ShootCD = 66/666 --0.10
+SWEP.ShootCD = 99/999 --0.10
 
 SWEP.PostAnimDamageTime = 0.1
 
-SWEP.Primary.ClipSize		= 35		-- Size of a clip
-SWEP.Primary.DefaultClip	= 35			-- Default number of bullets in a clip
+SWEP.Primary.ClipSize		= 100		-- Size of a clip
+SWEP.Primary.DefaultClip	= 100			-- Default number of bullets in a clip
 SWEP.Primary.Automatic		= true		-- Automatic/Semi Auto
 SWEP.Primary.Ammo			= "ar2"
 
@@ -81,7 +82,7 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 	else
 		DrawModel:SetModel(self.WeaponModel)
 
-		local vec = Vector(55, 55, 60)
+		local vec = Vector(59, 60, 60)
 		local ang = Vector(-48, -48, -48):Angle()
 
 		cam.Start3D(vec, ang, 20, x, y + 35, wide, tall, 5, 4096)
@@ -130,7 +131,7 @@ SWEP["AutoHook_RS_RAGDOLLCONTROL(PostBodyAnimation)"] = function(self,comrag,eye
 			--print(CurTime())
 		else
 			if(!RS_RAGDOLLCONTROL_ANIMATION:IsAnimating(rag,"weapon_m4a1(reload)"))then
-				RS_RAGDOLLCONTROL_ANIMATION:AnimateRag(rag,"weapon_ak(idle)",1)
+				RS_RAGDOLLCONTROL_ANIMATION:AnimateRag(rag,"weapon_ak(idle)",-4)
 			end
 		end
 		if(IsChanged(ply:KeyDown(IN_ATTACK2),"KeyDown_IN_ATTACK2",self) and !ply:KeyDown(IN_ATTACK2))then
@@ -251,21 +252,21 @@ table.Merge(SWEP,{	--Easy way of creating rest of the SWEP from legacy BSF SWEP 
 		local b_hand = rag.PhysBones["ValveBiped.Bip01_R_Hand"]
 		local handangs = b_hand:GetAngles()
 		local handangs = b_hand:GetAngles()
-		handangs:RotateAroundAxis(handangs:Forward(),180)
+		handangs:RotateAroundAxis(handangs:Forward(),-180)
 		handangs:RotateAroundAxis(handangs:Right(),0)
 		--handangs:RotateAroundAxis(handangs:Up(),180)
-		wep:SetPos(b_hand:GetPos()+b_hand:GetAngles():Forward()*13+b_hand:GetAngles():Right()*1.5+b_hand:GetAngles():Up()*2)
+		wep:SetPos(b_hand:GetPos()+b_hand:GetAngles():Forward()*-2+b_hand:GetAngles():Right()*2+b_hand:GetAngles():Up()*-0.5)
 		wep:SetAngles(handangs)
 	end,
 	
 	WeldWeaponLHandEnt = function(self)
-		if(CLIENT)then return end
+		if(CLIENT)then return end                              ----Hand bs above and below goodluck tinkering with that
 		local ply = self.Owner
 		local rag = ply.RS_Ragdoll
 		local wep = self.WeaponEnt
 		local b_handL = rag.PhysBones["ValveBiped.Bip01_L_Hand"]
 		local locvec = self:GetLeftHandPos()
-		locvec = locvec + b_handL:GetAngles():Forward()*4 + b_handL:GetAngles():Up()*-1 + b_handL:GetAngles():Right()*1
+		locvec = locvec + b_handL:GetAngles():Forward()*4.5 + b_handL:GetAngles():Up()*-50 + b_handL:GetAngles():Right()*10
 		--locvec = b_handL:WorldToLocal(locvec)
 		self.WeaponLHANDWeld = constraint.Ballsocket(wep,rag,0,rag._PhysToBonesNum[b_handL],b_handL:WorldToLocal(locvec),0,0)--constraint.Weld(wep,rag,0,rag._PhysToBonesNum[b_handL],0,false,false)
 	end,
@@ -383,7 +384,7 @@ table.Merge(SWEP,{	--Easy way of creating rest of the SWEP from legacy BSF SWEP 
 	end,
 	
 	RecoilAddPerSecond = 2,
-	MaxRecoil = 1.5,
+	MaxRecoil =4,
 	AddRecoilMul = function(self,amt)
 		self.RecoilMul = math.Clamp((self.RecoilMul or 1)+amt,1,self.MaxRecoil)
 	end,
@@ -404,7 +405,7 @@ table.Merge(SWEP,{	--Easy way of creating rest of the SWEP from legacy BSF SWEP 
 		
 		self:Recoil(Angle(-recoilmul*math.Rand(0.3,0.5)/1.8,-recoilmul/1.5*math.Rand(-0.3,0.4),0),Angle(-recoilmul/1.8*math.Rand(0.3,0.5),-recoilmul/1.5*math.Rand(-0.1,0.2),0))
 		
-		self.WeaponEnt:EmitSound("weapons/galil/galil-1.wav",75,100,1,CHAN_WEAPON)
+		self.WeaponEnt:EmitSound("pwb2/weapons/pkm/pkm-2.wav",75,100,1,CHAN_WEAPON)
 		
 		--self:AddRecoilMul(-0.1)
 		self:AddRecoilMul(-2*self.ShootCD)
@@ -414,7 +415,7 @@ table.Merge(SWEP,{	--Easy way of creating rest of the SWEP from legacy BSF SWEP 
 		self:SetConstraintState("normal")
 	end,
 	
-	ReloadTime = 2.3,
+	ReloadTime = 3,
 	Reload = function(self)
 		--if(SERVER)then
 		local ply = self.Owner
@@ -425,7 +426,7 @@ table.Merge(SWEP,{	--Easy way of creating rest of the SWEP from legacy BSF SWEP 
 			if(SERVER)then
 				RS_RAGDOLLCONTROL_ANIMATION:ResetAnimation(rag,"weapon_m4a1(reload)")
 				self:SetConstraintState("reload")
-				self.WeaponEnt:EmitSound("weapons/galil/galil_clipin.wav",55,100,1,CHAN_AUTO)
+				self.WeaponEnt:EmitSound("pwb2/weapons/pkm/pkm_boxout.wav",55,100,1,CHAN_AUTO)
 			end
 		end
 		--end
